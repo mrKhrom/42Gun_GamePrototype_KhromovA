@@ -12,7 +12,7 @@ namespace GamePrototype.Game
         private DungeonRoom _dungeon;
         private readonly CombatManager _combatManager = new CombatManager();
         private readonly Status _status = new Status();
-        private readonly Map _map = new Map();
+        private Map _map;
         
         public void StartGame() 
         {
@@ -26,10 +26,26 @@ namespace GamePrototype.Game
         private void Initialize()
         {
             Console.WriteLine("Welcome, player!");
-            _dungeon = DungeonBuilder.BuildDungeon();
-            Console.WriteLine("Enter your name");
-            _player = UnitFactoryDemo.CreatePlayer(Console.ReadLine());
-            Console.WriteLine($"Hello {_player.Name}");
+            Console.WriteLine("Choose difficulty (easy/hard):");
+            var diffInput = Console.ReadLine()?.ToLowerInvariant().Trim() ?? "easy";
+            var difficulty = diffInput.Contains("hard") ? Difficulty.Hard : Difficulty.Easy;
+            Console.WriteLine($"Playing on {difficulty} difficulty.");
+
+            IUnitFactory unitFactory = difficulty == Difficulty.Easy
+                ? new EasyUnitFactory()
+                : new HardUnitFactory();
+
+            IDungeonBuilder dungeonBuilder = difficulty == Difficulty.Easy
+                ? new EasyDungeonBuilder()
+                : new HardDungeonBuilder();
+
+            _dungeon = dungeonBuilder.BuildDungeon(unitFactory);
+            _map = new Map(difficulty);
+
+            Console.WriteLine("Enter your name:");
+            var name = Console.ReadLine()?.Trim() ?? "Hero";
+            _player = unitFactory.CreatePlayer(name);
+            Console.WriteLine($"Hello, {_player.Name}!");
         }
 
         private void StartGameLoop()

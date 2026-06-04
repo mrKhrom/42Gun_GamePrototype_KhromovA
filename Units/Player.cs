@@ -45,14 +45,22 @@ namespace GamePrototype.Units
             {
                 if (_equipment.TryGetValue(equipItem.Slot, out var current))
                 {
-                    if (Inventory.TryAdd(current))
+                    Console.WriteLine($"Slot {equipItem.Slot} occupied by {current.Name}. Replace with {equipItem.Name}? (Yes/No)");
+                    var response = Console.ReadLine()?.ToLowerInvariant().Trim() ?? "no";
+                    if (response == "yes" || response == "y")
                     {
+                        if (!Inventory.TryAdd(current))
+                        {
+                            Console.WriteLine("Inventory full, old equipment discarded.");
+                        }
                         _equipment[equipItem.Slot] = equipItem;
-                        Console.WriteLine($"{Name} changed {current.Name} for {equipItem.Name}.");
-                        return;
+                        Console.WriteLine($"{Name} replaced {current.Name} with {equipItem.Name}.");
                     }
-
-                    Console.WriteLine($"Inventory is full, {Name} cannot replace {current.Name} with {equipItem.Name}.");
+                    else
+                    {
+                        Console.WriteLine("Kept current equipment.");
+                        base.AddItemToInventory(equipItem); // add to inventory instead
+                    }
                     return;
                 }
 
