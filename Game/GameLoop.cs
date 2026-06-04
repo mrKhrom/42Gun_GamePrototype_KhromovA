@@ -12,6 +12,7 @@ namespace GamePrototype.Game
         private DungeonRoom _dungeon;
         private readonly CombatManager _combatManager = new CombatManager();
         private readonly Status _status = new Status();
+        private readonly Map _map = new Map();
         
         public void StartGame() 
         {
@@ -50,6 +51,11 @@ namespace GamePrototype.Game
                     if (input?.Trim().Equals("status", StringComparison.OrdinalIgnoreCase) == true)
                     {
                         _status.Show((Player)_player);
+                        continue;
+                    }
+                    if (input?.Trim().Equals("map", StringComparison.OrdinalIgnoreCase) == true)
+                    {
+                        _map.Show(currentRoom.Name);
                         continue;
                     }
 
@@ -102,6 +108,7 @@ namespace GamePrototype.Game
             {
                 Console.Write($"{room.Key} : {(int) room.Key}\t");
             }
+            Console.WriteLine("Options: status, map");
         }
 
         

@@ -11,20 +11,19 @@ namespace GamePrototype.Utils
             var enter = new DungeonRoom("Enter");
             var monsterRoom = new DungeonRoom("Monster", UnitFactoryDemo.CreateGoblinEnemy());
             var emptyRoom = new DungeonRoom("Empty");
-            var lootRoom = new DungeonRoom("Loot1", new Gold());
-            var lootStoneRoom = new DungeonRoom("Loot1", new Grindstone("Stone"));
+            var lootRoom = new DungeonRoom("LootStone", new Gold());
+            var lootStoneRoom = new DungeonRoom("LootStone", new Grindstone("Stone"));
             var finalRoom = new DungeonRoom("Final", new Grindstone("Stone1"));
             var armourRoom = new DungeonRoom("Armour", new Helmet(10, 15, "Helmet"));
             var weaponRoom = new DungeonRoom("Weapon", new RangeWeapon(20, "Archer Bow"));
 
-            enter.TrySetDirection(Direction.Right, monsterRoom);
-            enter.TrySetDirection(Direction.Left, emptyRoom);
+            enter.TrySetDirection(Direction.Right, emptyRoom);
+            enter.TrySetDirection(Direction.Left, monsterRoom);
             enter.TrySetDirection(Direction.Forward, armourRoom);
 
             armourRoom.TrySetDirection(Direction.Forward, weaponRoom);
             weaponRoom.TrySetDirection(Direction.Forward, monsterRoom);
 
-            monsterRoom.TrySetDirection(Direction.Right, armourRoom);
             monsterRoom.TrySetDirection(Direction.Forward, lootRoom);
             monsterRoom.TrySetDirection(Direction.Left, emptyRoom);
 
