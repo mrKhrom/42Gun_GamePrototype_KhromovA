@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "NSgYQAsqsSU=",
+  "success": true,
+  "projectFilePath": "/Users/alekseykhromov/Library/Mobile Documents/com~apple~CloudDocs/My Cloud/GameDev/Разработчик uninty/2 CSharp/GamePrototype/GamePrototype.csproj",
+  "expectedPackageFiles": [
+    "/Users/alekseykhromov/.nuget/packages/microsoft.netcore.app.ref/6.0.36/microsoft.netcore.app.ref.6.0.36.nupkg.sha512",
+    "/Users/alekseykhromov/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.36/microsoft.aspnetcore.app.ref.6.0.36.nupkg.sha512",
+    "/Users/alekseykhromov/.nuget/packages/microsoft.netcore.app.host.osx-arm64/6.0.36/microsoft.netcore.app.host.osx-arm64.6.0.36.nupkg.sha512"
+  ],
+  "logs": []
+}
