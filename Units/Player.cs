@@ -25,7 +25,7 @@ namespace GamePrototype.Units
         public override void HandleCombatComplete()
         {
             var items = Inventory.Items;
-            for (int i = 0; i < items.Count; i++) 
+            for (int i = items.Count - 1; i >= 0; i--) 
             {
                 if (items[i] is EconomicItem economicItem) 
                 {
@@ -49,17 +49,52 @@ namespace GamePrototype.Units
         {
             if (economicItem is HealthPotion healthPotion) 
             {
-                Health += healthPotion.HealthRestore;
+                var restoreAmount = healthPotion.HealthRestore;
+                var effectiveRestore = MaxHealth - Health <= restoreAmount ? MaxHealth - Health : restoreAmount;
+                Health += effectiveRestore;
+                Console.WriteLine($"{Name} uses {economicItem.Name} and restores {effectiveRestore} health. Current health {Health}/{MaxHealth}.");
+                return;
+            }
+
+            if (economicItem is Grindstone)
+            {
+                if (_equipment.TryGetValue(EquipSlot.Weapon, out var weaponItem) && weaponItem is Weapon weapon)
+                {
+                    weapon.Repair(4);
+                    Console.WriteLine($"{Name} uses {economicItem.Name} on weapon and repairs it by 4 points.");
+                    return;
+                }
+
+                if (_equipment.TryGetValue(EquipSlot.Armour, out var armourItem) && armourItem is Armour armour)
+                {
+                    armour.Repair(4);
+                    Console.WriteLine($"{Name} uses {economicItem.Name} on armour and repairs it by 4 points.");
+                }
             }
         }
 
         protected override uint CalculateAppliedDamage(uint damage)
         {
-            if (_equipment.TryGetValue(EquipSlot.Armour, out var item) && item is Armour armour) 
+            if (_equipment.TryGetValue(EquipSlot.Armour, out var item) && item is Armour armour && armour.Durability > 0) 
             {
                 damage -= (uint)(damage * (armour.Defence / 100f));
             }
             return damage;
+        }
+
+        protected override void DamageReceiveHandler()
+        {
+            if (_equipment.TryGetValue(EquipSlot.Armour, out var item) && item is Armour armour && armour.Durability > 0)
+            {
+                armour.ReduceDurability(1);
+                Console.WriteLine($"{Name}'s armour loses 1 durability and now has {armour.Durability}.");
+
+                if (armour.Durability == 0)
+                {
+                    _equipment.Remove(EquipSlot.Armour);
+                    Console.WriteLine($"{Name}'s armour is broken.");
+                }
+            }
         }
 
         public override string ToString()

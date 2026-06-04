@@ -1,4 +1,5 @@
-﻿using GamePrototype.Combat;
+﻿using System;
+using GamePrototype.Combat;
 using GamePrototype.Dungeon;
 using GamePrototype.Units;
 using GamePrototype.Utils;
@@ -10,6 +11,7 @@ namespace GamePrototype.Game
         private Unit _player;
         private DungeonRoom _dungeon;
         private readonly CombatManager _combatManager = new CombatManager();
+        private readonly Status _status = new Status();
         
         public void StartGame() 
         {
@@ -44,7 +46,14 @@ namespace GamePrototype.Game
                 DisplayRouteOptions(currentRoom);
                 while (true) 
                 {
-                    if (Enum.TryParse<Direction>(Console.ReadLine(), out var direction) ) 
+                    var input = Console.ReadLine();
+                    if (input?.Trim().Equals("status", StringComparison.OrdinalIgnoreCase) == true)
+                    {
+                        _status.Show((Player)_player);
+                        continue;
+                    }
+
+                    if (Enum.TryParse<Direction>(input, out var direction) ) 
                     {
                         currentRoom = currentRoom.Rooms[direction];
                         break;
@@ -91,7 +100,7 @@ namespace GamePrototype.Game
             Console.WriteLine("Where to go?");
             foreach (var room in currentRoom.Rooms)
             {
-                Console.Write($"{room.Key} - {(int) room.Key}\t");
+                Console.Write($"{room.Key} : {(int) room.Key}\t");
             }
         }
 
